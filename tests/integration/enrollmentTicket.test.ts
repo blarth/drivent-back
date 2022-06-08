@@ -32,10 +32,11 @@ describe('POST /enrollment-tickets', () => {
 
     const response = await server.post(`/enrollment-tickets`).set('Authorization', `Bearer ${token}`).send(body);
 
+    delete response.body.id;
+
     expect(response.status).toBe(httpStatus.CREATED);
 
     expect(response.body).toEqual({
-      id: 1,
       enrollmentId,
       eventTicketId: eventTickets.id,
       roomId: null,
