@@ -6,7 +6,8 @@ env:
   POSTGRES_PASSWORD: top_secret
   POSTGRES_HOST: drivent-postgres-test
   POSTGRES_PORT: 5432
-  POSTGRES_DB: drivent_test
+  POSTGRES_DATABASE: drivent_test
+  REDIS_PORT: 6379
   JWT_SECRET: top_secret
   DATABASE_URL: postgres://postgres:top_secret@drivent-postgres-test:5432/drivent_test?schema=public
 jobs:
