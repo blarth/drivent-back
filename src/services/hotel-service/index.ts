@@ -9,21 +9,29 @@ export async function findAll() {
       imagePath: el.imagePath,
       id: el.id,
       roomStyle: el.Room.map((el) => el.Room.name),
+      numberBeds: el.Room.reduce((total, item) => item.Room.beds + total, 0),
+      numberEnrollments: el.Room.filter((el) => el.EnrollmentTicket.length !== 0),
     };
   });
 
-  /* for (const hotel of reducedStyles) {
-    const openSlots = await hotelRepository.sumEnrollmentTicket(hotel.id);
+  const hotelsMapped = reducedStyles.map((el) => {
+    const uniqueRoomStyles: string[] = [];
+    el.roomStyle.forEach((c) => {
+      if (!uniqueRoomStyles.includes(c)) {
+        uniqueRoomStyles.push(c);
+      }
+    });
+    const numberSlots = el.numberBeds - el.numberEnrollments.length;
+    delete el.numberBeds;
+    delete el.numberEnrollments;
     return {
-      ...hotel,
-      openSlots,
+      ...el,
+      openSlots: numberSlots,
+      roomStyle: uniqueRoomStyles,
     };
-  } */
+  });
 
-  /* const set = reducedStyles.map((el) => new Set(el.roomStyle)); */
-  /* const roomStyles = hotels.map(); */
-  /* const beds = await hotelRepository.sumBeds(); */
-  return reducedStyles;
+  return hotelsMapped;
 }
 
 const hotelService = {

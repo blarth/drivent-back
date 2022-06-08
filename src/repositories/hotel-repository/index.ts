@@ -7,7 +7,6 @@ async function findAll() {
       name: true,
       imagePath: true,
       Room: {
-        distinct: ['styleId'],
         select: {
           number: true,
           EnrollmentTicket: {
@@ -27,33 +26,8 @@ async function findAll() {
   });
 }
 
-async function sumBeds(hotelId: number) {
-  return await prisma.roomStyle.groupBy({
-    by: ['beds'],
-    where: {
-      Room: {},
-    },
-    _sum: {
-      beds: true,
-    },
-  });
-}
-/* async function sumEnrollmentTicket(id: number) {
-  return await prisma.enrollmentTicket.findMany({
-    select: {
-      _count: {
-        select: {
-          
-        },
-      },
-    },
-  });
-} */
-
 const hotelRepository = {
   findAll,
-  sumBeds,
-  /* sumEnrollmentTicket, */
 };
 
 export default hotelRepository;
