@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import dayjs from 'dayjs';
+import { number } from 'joi';
 const prisma = new PrismaClient();
 
 async function main() {
@@ -51,6 +52,74 @@ async function main() {
       },
     });
   }
+
+  let hotels = await prisma.hotel.findFirst()
+  if(!hotels) {
+    await prisma.hotel.create({
+      data : {
+        name : "Driven Resort",
+        imagePath : "https://www.sn.at/wiki/images/1/16/Front_view_by_night_Sheraton_Salzburg_Hotel.jpg"
+      }
+    })
+    await prisma.hotel.create({
+      data : {
+        name : "Driven Palace",
+        imagePath : "https://www.efteling.com/en/-/media/images/nieuw-meetings-en-events/meetings-and-events/locaties/efteling-hotel/1024x576-locaties-hotel-imagegallerij.jpg"
+      }
+    })
+    await prisma.hotel.create({
+      data : {
+        name : "Driven World",
+        imagePath : "https://www.e-lazne.eu/uploads/images/hotel/5e36d9e5056ea_hotel_savoy_spindleruv_mlyn.jpg"
+      }
+    })
+  }
+
+  let styles = await prisma.roomStyle.findFirst()
+  if(!styles){
+    await prisma.roomStyle.create({
+      data : {
+        name : "Single",
+        beds : 1
+      }
+    })
+    await prisma.roomStyle.create({
+      data : {
+        name : "Double",
+        beds : 2
+      }
+    })
+    await prisma.roomStyle.create({
+      data : {
+        name : "Triple",
+        beds : 3
+      }
+    })
+  }
+
+  for(let i=1; i<= 3; i++){
+    for(let j = 0; j<10; j++){
+      const roomStyleId = generateRoomStyleId()
+      await prisma.room.create({
+        data : {
+          number : `10${j}`,
+          hotelId : i,
+          styleId : roomStyleId
+        }
+      })
+    }
+  }
+  const rooms = await prisma.room.findMany({})
+
+  console.log({ rooms });
+  
+}
+
+function generateRoomStyleId(){
+  const x = Math.random()
+  if(x < 0.33) return 1
+  if(x < 0.66) return 2
+  return 3
 }
 
 main()
