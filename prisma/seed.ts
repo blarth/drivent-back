@@ -97,7 +97,9 @@ async function main() {
     })
   }
 
-  for(let i=1; i<= 3; i++){
+  let roomsExists = await prisma.room.findFirst()
+  if(!roomsExists){
+    for(let i=1; i<= 3; i++){
     for(let j = 0; j<10; j++){
       const roomStyleId = generateRoomStyleId()
       await prisma.room.create({
@@ -109,10 +111,10 @@ async function main() {
       })
     }
   }
-  const rooms = await prisma.room.findMany({})
+  }
 
-  console.log({ rooms });
-  
+  const rooms = await prisma.room.findMany({})
+  console.log({ rooms })
 }
 
 function generateRoomStyleId(){
